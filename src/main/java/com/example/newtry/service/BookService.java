@@ -39,4 +39,8 @@ public class BookService {
         updatedBook.setId(id);
         bookRepository.save(updatedBook);
     }
+
+    public Book findByTitle(String title) {
+        return bookRepository.findByTitle(title);
+    }
 }

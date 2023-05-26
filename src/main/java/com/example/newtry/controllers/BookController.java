@@ -2,6 +2,7 @@ package com.example.newtry.controllers;
 
 import com.example.newtry.models.Book;
 import com.example.newtry.service.BookService;
+import com.example.newtry.util.BookValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private final BookService bookService;
+    private final BookValidator bookValidator;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookValidator bookValidator) {
         this.bookService = bookService;
+        this.bookValidator = bookValidator;
     }
 
     @GetMapping("/list")
@@ -39,6 +42,7 @@ public class BookController {
 
     @PostMapping()
     public String addBook(@ModelAttribute(name = "book") @Valid Book book, BindingResult errors) {
+        bookValidator.validate(book, errors);
         if (errors.hasErrors()) return "newBook";
         bookService.save(book);
         return "redirect:/books/list";
@@ -58,6 +62,7 @@ public class BookController {
 
     @PostMapping("/update/{id}")
     public String updateBook(@ModelAttribute(name = "book") @Valid Book book, BindingResult errors, @PathVariable(name = "id") int id) {
+        bookValidator.validate(book, errors);
         if (errors.hasErrors()) return "editBook";
         bookService.update(id, book);
         return "redirect:/books/list";
