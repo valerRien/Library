@@ -35,8 +35,8 @@ public class PeopleService {
         peopleRepository.deleteById(id);
     }
 
-    public void update(int id, Person person) {
-        person.setId(id);
-        peopleRepository.save(person);
+    public void update(int id, Person updatedPerson) {
+        updatedPerson.setId(id);
+        peopleRepository.save(updatedPerson);
     }
 }

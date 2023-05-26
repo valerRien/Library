@@ -33,12 +33,12 @@ public class PeopleController {
     }
 
     @GetMapping("/new")
-    public String newPerson(@ModelAttribute("person") Person person) {
+    public String newPerson(@ModelAttribute(name = "person") Person person) {
         return "newPerson";
     }
 
     @PostMapping
-    public String createPerson(@ModelAttribute("person") @Valid Person person, BindingResult errors) {
+    public String createPerson(@ModelAttribute(name = "person") @Valid Person person, BindingResult errors) {
         if (errors.hasErrors()) return "newPerson";
         peopleService.save(person);
         return "redirect:/people/list";
@@ -56,9 +56,8 @@ public class PeopleController {
         return "editPerson";
     }
 
-    @PostMapping("update/{id}")
-    public String saveEditing(@ModelAttribute(name = "person") @Valid Person person, @PathVariable(name = "id") int id,
-                              BindingResult errors) {
+    @PostMapping("/update/{id}")
+    public String updatePerson(@ModelAttribute(name = "person") @Valid Person person, BindingResult errors, @PathVariable(name = "id") int id) {
         if (errors.hasErrors()) return "editPerson";
         peopleService.update(id, person);
         return "redirect:/people/list";

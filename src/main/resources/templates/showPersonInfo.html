@@ -2,18 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Show</title>
+    <title>Инфо читателя</title>
 </head>
 <body>
 <p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">VALUE</p>
 
-<a th:href="@{/people/list}">Return to list</a>
 <p></p>
-<a th:href="@{/people/edit/{id}(id=${person.getId()})}">Edit</a>
+<a th:href="@{/people/edit/{id}(id=${person.getId()})}">Изменить данные читателя</a>
 
 
 <form th:method="DELETE" th:action="@{/people/delete/{id}(id=${person.getId()})}">
-    <input type="submit" value="Delete person"/>
+    <input type="submit" value="Удалить читателя"/>
 </form>
+
+<p><a th:href="@{/people/list}">Вернуться к списку читателей</a></p>
 </body>
 </html>

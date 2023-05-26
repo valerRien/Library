@@ -14,9 +14,6 @@ public class Book {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "person_id")
-    private int owner;
-
     @Column(name = "title")
     @Size(max = 100, message = "Название книги должно умещаться в 100 символов")
     @NotEmpty
@@ -28,7 +25,6 @@ public class Book {
     private String author;
 
     @Column(name = "year_of_production")
-    @NotEmpty
     @Min(value = 1000, message = "Книги, датированные раньше 1000 года нэ утеряны")
     private int yearOfProduction;
 
@@ -47,14 +43,6 @@ public class Book {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getOwner() {
-        return owner;
-    }
-
-    public void setOwner(int owner) {
-        this.owner = owner;
     }
 
     public String getTitle() {
