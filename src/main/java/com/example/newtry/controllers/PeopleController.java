@@ -1,5 +1,6 @@
 package com.example.newtry.controllers;
 
+import com.example.newtry.dao.BookDAO;
 import com.example.newtry.dao.PersonDAO;
 import com.example.newtry.models.Person;
 import com.example.newtry.service.PersonService;
@@ -18,12 +19,14 @@ public class PeopleController {
     private final PersonService personService;
     private final PersonValidator personValidator;
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
 
     @Autowired
-    public PeopleController(PersonService personService, PersonValidator personValidator, PersonDAO personDAO) {
+    public PeopleController(PersonService personService, PersonValidator personValidator, PersonDAO personDAO, BookDAO bookDAO) {
         this.personService = personService;
         this.personValidator = personValidator;
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
     }
 
     @GetMapping("/list")
@@ -69,6 +72,12 @@ public class PeopleController {
         personValidator.validate(person, errors);
         if (errors.hasErrors()) return "editPerson";
         personService.update(id, person);
+        return "redirect:/people/list";
+    }
+
+    @DeleteMapping("/releaseBook/{id}")
+    public String release(@PathVariable(name = "id") int id){
+        bookDAO.releaseBook(id);
         return "redirect:/people/list";
     }
 }

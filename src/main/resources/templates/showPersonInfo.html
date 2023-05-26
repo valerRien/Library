@@ -19,6 +19,11 @@
     <br/>
     <table th:each="book : ${books}">
         <tr th:text="${book.getTitle() + ', ' + book.getYearOfProduction()}">Book info</tr>
+
+        <form th:method="DELETE" th:action="@{/people/releaseBook/{id}(id=${book.getId()})}">
+            <input type="submit" value="Сдать"/>
+        </form>
+
     </table>
 </div>
 </p>
