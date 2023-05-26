@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Инфо читателя</title>
 </head>
 <body>
-<p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">VALUE</p>
+<p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">Person info</p>
+<hr/>
+<p>
 
-<p></p>
+<div th:if="${books.isEmpty()}">
+    <p>Этот читатель всё сдал!</p>
+    <hr/>
+</div>
+
+<div th:if="${!books.isEmpty()}">
+    <b> Книги у читателя: </b>
+    <br/>
+    <table th:each="book : ${books}">
+        <tr th:text="${book.getTitle() + ', ' + book.getYearOfProduction()}">Book info</tr>
+    </table>
+</div>
+</p>
+<hr/>
 <a th:href="@{/people/edit/{id}(id=${person.getId()})}">Изменить данные читателя</a>
 
 
