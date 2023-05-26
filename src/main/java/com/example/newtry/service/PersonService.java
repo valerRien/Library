@@ -10,12 +10,12 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PeopleService {
+public class PersonService {
 
     private final PeopleRepository peopleRepository;
 
     @Autowired
-    public PeopleService(PeopleRepository peopleRepository) {
+    public PersonService(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
     }
 
@@ -38,5 +38,9 @@ public class PeopleService {
     public void update(int id, Person updatedPerson) {
         updatedPerson.setId(id);
         peopleRepository.save(updatedPerson);
+    }
+
+    public Person findByFullName(String name) {
+        return peopleRepository.findByFullName(name);
     }
 }

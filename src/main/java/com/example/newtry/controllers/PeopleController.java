@@ -1,7 +1,8 @@
 package com.example.newtry.controllers;
 
 import com.example.newtry.models.Person;
-import com.example.newtry.service.PeopleService;
+import com.example.newtry.service.PersonService;
+import com.example.newtry.util.PersonValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,22 +14,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final PeopleService peopleService;
+    private final PersonService personService;
+    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PeopleService peopleService) {
-        this.peopleService = peopleService;
+    public PeopleController(PersonService personService, PersonValidator personValidator) {
+        this.personService = personService;
+        this.personValidator = personValidator;
     }
 
     @GetMapping("/list")
     public String listPeople(Model model) {
-        model.addAttribute("people", peopleService.listPeople());
+        model.addAttribute("people", personService.listPeople());
         return "listPeople";
     }
 
     @GetMapping("/{id}")
     public String showPersonInfo(@PathVariable(name = "id") int id, Model model) {
-        model.addAttribute("person", peopleService.showPersonInfo(id));
+        model.addAttribute("person", personService.showPersonInfo(id));
         return "showPersonInfo";
     }
 
@@ -39,27 +42,29 @@ public class PeopleController {
 
     @PostMapping
     public String createPerson(@ModelAttribute(name = "person") @Valid Person person, BindingResult errors) {
+        personValidator.validate(person, errors);
         if (errors.hasErrors()) return "newPerson";
-        peopleService.save(person);
+        personService.save(person);
         return "redirect:/people/list";
     }
 
     @DeleteMapping("/delete/{id}")
     public String deletePerson(@PathVariable(name = "id") int id) {
-        peopleService.delete(id);
+        personService.delete(id);
         return "redirect:/people/list";
     }
 
     @GetMapping("/edit/{id}")
     public String editPerson(@PathVariable(name = "id") int id, Model model) {
-        model.addAttribute("person", peopleService.showPersonInfo(id));
+        model.addAttribute("person", personService.showPersonInfo(id));
         return "editPerson";
     }
 
     @PostMapping("/update/{id}")
     public String updatePerson(@ModelAttribute(name = "person") @Valid Person person, BindingResult errors, @PathVariable(name = "id") int id) {
+        personValidator.validate(person, errors);
         if (errors.hasErrors()) return "editPerson";
-        peopleService.update(id, person);
+        personService.update(id, person);
         return "redirect:/people/list";
     }
 }
