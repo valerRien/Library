@@ -1,5 +1,6 @@
 package com.example.newtry.controllers;
 
+import com.example.newtry.dao.BookDAO;
 import com.example.newtry.models.Book;
 import com.example.newtry.service.BookService;
 import com.example.newtry.util.BookValidator;
@@ -16,11 +17,13 @@ public class BookController {
 
     private final BookService bookService;
     private final BookValidator bookValidator;
+    private final BookDAO bookDAO;
 
     @Autowired
-    public BookController(BookService bookService, BookValidator bookValidator) {
+    public BookController(BookService bookService, BookValidator bookValidator, BookDAO bookDAO) {
         this.bookService = bookService;
         this.bookValidator = bookValidator;
+        this.bookDAO = bookDAO;
     }
 
     @GetMapping("/list")
@@ -32,6 +35,7 @@ public class BookController {
     @GetMapping("/{id}")
     public String showBookInfo(@PathVariable(name = "id") int id, Model model) {
         model.addAttribute("book", bookService.showBookInfo(id));
+        model.addAttribute("person", bookDAO.getOwner(id));
         return "showBookInfo";
     }
 

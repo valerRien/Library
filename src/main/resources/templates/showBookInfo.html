@@ -5,7 +5,22 @@
     <title>Подробнее о книге</title>
 </head>
 <body>
-<p th:text="${book.getTitle() + ', ' + book.getYearOfProduction()}">VALUE</p>
+<p th:text="${book.getTitle() + ', ' + book.getYearOfProduction() + ' (автор: ' + book.getAuthor() + ')'}">VALUE</p>
+<hr/>
+
+<div th:if="${person.isEmpty()}">
+    <p>Книга в библиотеке</p>
+    <hr/>
+</div>
+
+<div th:if="${!person.isEmpty()}">
+    <b>Книга сейчас у :</b>
+    <table th:each="owner : ${person}">
+        <tr th:href="@{/people/{id}(id=${owner.getId()})}"
+           th:text="${owner.getFullName() + ', ' + owner.getYearOfBirth()}">User info</tr>
+    </table>
+
+</div>
 
 <p></p>
 <a th:href="@{/books/edit/{id}(id=${book.getId()})}">Изменить данные книги</a>
