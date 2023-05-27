@@ -4,6 +4,7 @@ import com.example.newtry.models.Book;
 import com.example.newtry.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class BookService {
     }
 
     public List<Book> listBooks() {
-        return bookRepository.findAll();
+        return bookRepository.findAll(Sort.by("title"));
     }
 
     public Book showBookInfo(int id) {
