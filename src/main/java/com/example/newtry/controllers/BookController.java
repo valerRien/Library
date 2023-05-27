@@ -2,7 +2,9 @@ package com.example.newtry.controllers;
 
 import com.example.newtry.dao.BookDAO;
 import com.example.newtry.models.Book;
+import com.example.newtry.models.Person;
 import com.example.newtry.service.BookService;
+import com.example.newtry.service.PersonService;
 import com.example.newtry.util.BookValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private final BookService bookService;
+    private final PersonService personService;
     private final BookValidator bookValidator;
     private final BookDAO bookDAO;
 
     @Autowired
-    public BookController(BookService bookService, BookValidator bookValidator, BookDAO bookDAO) {
+    public BookController(BookService bookService, PersonService personService, BookValidator bookValidator, BookDAO bookDAO) {
         this.bookService = bookService;
+        this.personService = personService;
         this.bookValidator = bookValidator;
         this.bookDAO = bookDAO;
     }
@@ -33,9 +37,10 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String showBookInfo(@PathVariable(name = "id") int id, Model model) {
+    public String showBookInfo(@PathVariable(name = "id") int id, Model model, @ModelAttribute("owner") Person person) {
         model.addAttribute("book", bookService.showBookInfo(id));
         model.addAttribute("person", bookDAO.getOwner(id));
+        model.addAttribute("owners", personService.listPeople());
         return "showBookInfo";
     }
 
@@ -73,5 +78,15 @@ public class BookController {
     }
 
 
+    @PatchMapping("/{id}/assign")
+    public String assignBook(@PathVariable(name = "id") int id, @ModelAttribute("owner") Person person) {
+        bookDAO.assignBookTo(id, person.getId());
+        return "redirect:/books/{id}";
+    }
 
+    @DeleteMapping("/releaseThisBook/{id}")
+    public String releaseThisBook(@PathVariable(name = "id") int id) {
+        bookDAO.releaseBook(id);
+        return "redirect:/books/{id}";
+    }
 }

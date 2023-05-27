@@ -31,4 +31,12 @@ public class BookDAO {
     public void releaseBook(int id) {
         jdbcTemplate.update("UPDATE Book SET person_id = null WHERE id=?", id);
     }
+
+    public void assignBookTo(int bookId, int personId) {
+        jdbcTemplate.update("UPDATE Book SET person_id=? WHERE id=?", personId, bookId);
+    }
+
+    public List<Book> findAll() {
+       return jdbcTemplate.query("SELECT * FROM Book WHERE person_id IS NULL ", new BeanPropertyRowMapper<>(Book.class));
+    }
 }

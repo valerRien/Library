@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class PersonDAO {
 
     private final JdbcTemplate jdbcTemplate;
@@ -21,7 +22,6 @@ public class PersonDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Transactional
     public List<Book> getBooks(int id) {
         return new ArrayList<>(jdbcTemplate.query("SELECT * FROM Book WHERE person_id = ?",
                 new Object[]{id}, new BeanPropertyRowMapper<>(Book.class)));

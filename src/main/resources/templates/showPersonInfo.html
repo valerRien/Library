@@ -10,8 +10,7 @@
 <p>
 
 <div th:if="${books.isEmpty()}">
-    <p>Этот читатель всё сдал!</p>
-    <hr/>
+    <p>Этот читатель всё сдал.</p>
 </div>
 
 <div th:if="${!books.isEmpty()}">
@@ -20,12 +19,23 @@
     <table th:each="book : ${books}">
         <tr th:text="${book.getTitle() + ', ' + book.getYearOfProduction()}">Book info</tr>
 
-        <form th:method="DELETE" th:action="@{/people/releaseBook/{id}(id=${book.getId()})}">
+        <form th:method="DELETE" th:action="@{/people/releaseBook/{id}/{ownerId}(id=${book.getId()}, ownerId=${person.getId()})}">
             <input type="submit" value="Сдать"/>
         </form>
 
     </table>
 </div>
+<div th:if="${!allBooks.isEmpty()}">
+<span>Выдать книгу:</span>
+<form th:method="PATCH" th:action="@{/people/{id}/assign(id=${person.getId()})}">
+    <select th:object="${book}" th:field="*{id}" id="book">
+        <option th:each="book : ${allBooks}" th:value="${book.getId()}" th:text="${book.getTitle()}">
+        </option>
+    </select>
+    <input type="submit" value="Выдать">
+</form>
+</div>
+
 </p>
 <hr/>
 <a th:href="@{/people/edit/{id}(id=${person.getId()})}">Изменить данные читателя</a>

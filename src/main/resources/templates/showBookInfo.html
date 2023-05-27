@@ -9,7 +9,15 @@
 <hr/>
 
 <div th:if="${person.isEmpty()}">
-    <p>Книга в библиотеке</p>
+    <p>Книга в библиотеке.</p>
+    <span>Выберите кому выдать:</span>
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+    <select th:object="${owner}" th:field="*{id}" id="owner">
+        <option th:each="owner : ${owners}" th:value="${owner.getId()}" th:text="${owner.getFullName()}">
+        </option>
+    </select>
+    <input type="submit" value="Выдать">
+    </form>
     <hr/>
 </div>
 
@@ -18,10 +26,14 @@
     <table th:each="owner : ${person}">
         <tr th:href="@{/people/{id}(id=${owner.getId()})}"
            th:text="${owner.getFullName() + ', ' + owner.getYearOfBirth()}">User info</tr>
+
+        <form th:method="DELETE" th:action="@{/books/releaseThisBook/{id}(id=${book.getId()})}">
+            <input type="submit" value="Сдать"/>
+        </form>
     </table>
 
 </div>
-
+<hr/>
 <p></p>
 <a th:href="@{/books/edit/{id}(id=${book.getId()})}">Изменить данные книги</a>
 

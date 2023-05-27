@@ -2,6 +2,7 @@ package com.example.newtry.controllers;
 
 import com.example.newtry.dao.BookDAO;
 import com.example.newtry.dao.PersonDAO;
+import com.example.newtry.models.Book;
 import com.example.newtry.models.Person;
 import com.example.newtry.service.PersonService;
 import com.example.newtry.util.PersonValidator;
@@ -36,9 +37,10 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String showPersonInfo(@PathVariable(name = "id") int id, Model model) {
+    public String showPersonInfo(@PathVariable(name = "id") int id, Model model, @ModelAttribute(name = "book") Book book) {
         model.addAttribute("person", personService.showPersonInfo(id));
         model.addAttribute("books", personDAO.getBooks(id));
+        model.addAttribute("allBooks", bookDAO.findAll());
         return "showPersonInfo";
     }
 
@@ -75,9 +77,15 @@ public class PeopleController {
         return "redirect:/people/list";
     }
 
-    @DeleteMapping("/releaseBook/{id}")
-    public String release(@PathVariable(name = "id") int id){
+    @DeleteMapping("/releaseBook/{id}/{ownerId}")
+    public String release(@PathVariable(name = "id") int id, @PathVariable(name = "ownerId") int ownerId){
         bookDAO.releaseBook(id);
-        return "redirect:/people/list";
+        return "redirect:/people/{ownerId}";
+    }
+
+    @PatchMapping("/{id}/assign")
+    public String assignBook(@PathVariable(name = "id") int id, @ModelAttribute(name = "book") Book book) {
+        bookDAO.assignBookTo(book.getId(), id);
+        return "redirect:/people/{id}";
     }
 }
