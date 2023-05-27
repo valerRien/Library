@@ -36,6 +36,10 @@
 </form>
 </div>
 
+<div th:if="${allBooks.isEmpty()}">
+    <span> В библиотеке нет свободных книг.</span>
+</div>
+
 </p>
 <hr/>
 <a th:href="@{/people/edit/{id}(id=${person.getId()})}">Изменить данные читателя</a>
